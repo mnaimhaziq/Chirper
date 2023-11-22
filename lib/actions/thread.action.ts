@@ -238,3 +238,34 @@ export async function addCommentToThread(
     throw new Error("Unable to add comment");
   }
 }
+
+export async function addQuoteThread(
+  threadId: string,
+  quoteText: string,
+  userId: string,
+  path: string
+ ) {
+  try {
+    connectToDB();
+
+    const originalThread = await Thread.findById(threadId);
+
+    if (!originalThread) {
+      throw new Error("Thread not found");
+    }
+
+       const quoteThread = new Thread({
+      text: quoteText,
+      author: userId,
+      quoteId: threadId, 
+    })
+
+    // Save the quote thread to the database
+    const savedQuoteThread = await quoteThread.save();
+
+    revalidatePath(path);
+    return savedQuoteThread;
+  } catch (error: any) {
+    throw new Error(`Failed to create thread: ${error.message}`);
+  }
+}

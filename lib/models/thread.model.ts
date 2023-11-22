@@ -18,6 +18,9 @@ const threadSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  quoteId: {
+    type: String,
+  },
   parentId: {
     type: String,
   },
