@@ -55,9 +55,9 @@ export default function ShareButton() {
           onClick={handleClick}
         />
 
-        <Popper id={id} open={open} anchorEl={anchorEl} sx={{ width: 250 }}>
-          <Box sx={{ bgcolor: "background.paper" }}>
-            <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <Popper id={id} open={open} anchorEl={anchorEl} sx={{ width: 250 }}>
+            <Box sx={{ bgcolor: "background.paper", marginTop: "10px" }}>
               <List>
                 <ListItem disablePadding>
                   <ListItemButton>
@@ -76,9 +76,9 @@ export default function ShareButton() {
                   </ListItemButton>
                 </ListItem>
               </List>
-            </ThemeProvider>
-          </Box>
-        </Popper>
+            </Box>
+          </Popper>
+        </ThemeProvider>
       </div>
     </ClickAwayListener>
   );
