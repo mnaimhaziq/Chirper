@@ -91,7 +91,7 @@ export default function ShareButton(props: Props) {
             <Box className="rounded-xl shadow-[0_0_10px_-5px_rgba(0,0,0,0.1)] shadow-white bg-dark-2 text-white ml-[-20px]">
               <List>
                 <ListItem disablePadding onClick={clickCopyLink}>
-                  <ListItemButton>
+                  <ListItemButton sx={{ borderRadius: "12px 12px 0 0" }}>
                     <ListItemIcon>
                       <LinkIcon />
                     </ListItemIcon>
@@ -102,7 +102,7 @@ export default function ShareButton(props: Props) {
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                  <ListItemButton>
+                  <ListItemButton sx={{ borderRadius: "0 0 12px 12px" }}>
                     <ListItemIcon>
                       <IosShareIcon />
                     </ListItemIcon>
