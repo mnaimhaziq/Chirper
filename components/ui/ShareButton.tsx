@@ -14,7 +14,11 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-export default function ShareButton() {
+interface Props {
+  id: string;
+}
+
+export default function ShareButton(props: Props) {
   const theme = createTheme({
     components: {
       MuiListItemIcon: {
@@ -53,6 +57,13 @@ export default function ShareButton() {
     setAnchorEl(null);
   };
 
+  const clickCopyLink = async () => {
+    const hostname = window.location.hostname; // Only includes hostname
+    const pathname = window.location.pathname; // Includes path and search query
+    const linkToCopy = `${window.location.protocol}//${hostname}/thread/${props.id}`;
+    await navigator.clipboard.writeText(linkToCopy);
+  };
+
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
 
@@ -79,7 +90,7 @@ export default function ShareButton() {
           >
             <Box className="rounded-xl shadow-[0_0_10px_-5px_rgba(0,0,0,0.1)] shadow-white bg-dark-2 text-white ml-[-20px]">
               <List>
-                <ListItem disablePadding>
+                <ListItem disablePadding onClick={clickCopyLink}>
                   <ListItemButton>
                     <ListItemIcon>
                       <LinkIcon />

@@ -95,7 +95,7 @@ function ThreadCard({
                   height={24}
                   className="cursor-pointer object-contain"
                 />
-                <ShareButton />
+                <ShareButton id={id}/>
               </div>
 
               {isComment && comments.length > 0 && (
