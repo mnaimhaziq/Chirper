@@ -77,10 +77,7 @@ export default function ShareButton() {
             placement="right"
             disablePortal={true}
           >
-            <Box
-              sx={{ bgcolor: "background.paper" }}
-              className="rounded-xl shadow-[0_0_10px_-5px_rgba(0,0,0,0.1)] shadow-white bg-dark-2 text-white ml-[-20px]"
-            >
+            <Box className="rounded-xl shadow-[0_0_10px_-5px_rgba(0,0,0,0.1)] shadow-white bg-dark-2 text-white ml-[-20px]">
               <List>
                 <ListItem disablePadding>
                   <ListItemButton>
