@@ -6,6 +6,7 @@ import { formatDateString } from "@/lib/utils";
 import QuoteCard from "./QuoteCard";
 import { fetchThreadById } from "@/lib/actions/thread.action";
 import { currentUser } from "@clerk/nextjs";
+import ShareButton from "../ui/ShareButton";
 // import DeleteThread from "../forms/DeleteThread";
 
 interface Props {
@@ -96,6 +97,7 @@ async function ThreadCard({
                   comments={originalThread.children}
                 />
             )}
+
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
                 <Image
@@ -130,6 +132,7 @@ async function ThreadCard({
                   height={24}
                   className="cursor-pointer object-contain"
                 />
+                <ShareButton id={id} content={content} />
               </div>
 
               {isComment && comments.length > 0 && (
