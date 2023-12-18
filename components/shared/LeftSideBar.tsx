@@ -23,7 +23,7 @@ export default function LeftSideBar() {
             <Link
               href={link.route}
               key={link.label}
-              className={`leftsidebar_link ${isActive && 'bg-primary-500'}`}
+              className={`leftsidebar_link ${isActive && 'dark:bg-primary-500 bg-lightmode-3'}`}
             >
               <Image
                 src={link.imgURL}
@@ -31,7 +31,7 @@ export default function LeftSideBar() {
                 width={24}
                 height={24}
               />
-              <p className="text-light-1 max-lg:hidden">{link.label}</p>
+              <p className="dark:text-light-1 text-dark-1 max-lg:hidden">{link.label}</p>
             </Link>
           );
         })}
@@ -42,7 +42,7 @@ export default function LeftSideBar() {
               <SignOutButton signOutCallback={() => router.push('/sign-in')}>
                 <div className='flex cursor-pointer gap-4 p-4'>
                   <Image src='/assets/logout.svg' alt='logout' width={24} height={24} />
-                  <p className="text-light-2 max-lg:hidden">Logout</p>
+                  <p className="dark:text-light-2 text-dark-2 max-lg:hidden">Logout</p>
                 </div>
               </SignOutButton>
             </SignedIn>

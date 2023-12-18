@@ -58,7 +58,7 @@ async function ThreadCard({
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
-        isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
+        isComment ? "px-0 xs:px-7" : "dark:bg-dark-2 bg-lightmode-1 p-7"
       }`}
     >
       <div className="flex items-start justify-between">
@@ -78,12 +78,12 @@ async function ThreadCard({
 
           <div className="flex w-full flex-col">
             <Link href={`/profile/${author.id}`} className="w-fit">
-              <h4 className="cursor-pointer text-base-semibold text-light-1">
+              <h4 className="cursor-pointer text-base-semibold dark:text-light-1 text-dark-1">
                 {author.name}
               </h4>
             </Link>
 
-            <p className="mt-2 text-small-regular text-light-2">{content}</p>
+            <p className="mt-2 text-small-regular dark:text-light-2 text-dark-2">{content}</p>
             {quoteId && (
                 <QuoteCard
                   id={originalThread._id}

@@ -73,7 +73,7 @@ const Quote = ({ threadId, currentUserImg, currentUserId }: Props) => {
                 type='text'
                 {...field}
                 placeholder='Quote...'
-                className='no-focus text-light-1 outline-none'
+                className='no-focus dark:text-light-1 text-dark-1 outline-none'
               />
             </FormControl>
           </FormItem>
