@@ -22,6 +22,18 @@ const userSchema = new mongoose.Schema({
       ref: "Thread",
     },
   ],
+  // replies: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Replies",
+  //   },
+  // ],
+  // likes: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Likes",
+  //   },
+  // ],
   onboarded: {
     type: Boolean,
     default: false,
