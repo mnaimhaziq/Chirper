@@ -8,6 +8,10 @@
     @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
   }
 
+  .sub-container {
+    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-10 max-md:pb-32 sm:px-10;
+  }
+
   /* Head Text */
   .head-text {
     @apply text-heading2-bold text-light-1;
@@ -80,6 +84,10 @@
 
   .leftsidebar_link {
     @apply relative flex justify-start gap-4 rounded-lg p-4;
+  }
+
+  .leftsidebar-dm {
+    @apply sticky left-0 top-0 z-0 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-r border-r-dark-4 bg-dark-1 pb-5 pt-5 max-md:hidden;
   }
 
   .pagination {
