@@ -52,6 +52,7 @@ export default function ShareButton(props: Props) {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [snack, setSnack] = React.useState(false);
+  const [linkToCopy, setLinkToCopy] = React.useState("");
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -69,9 +70,18 @@ export default function ShareButton(props: Props) {
     setSnack(false);
   };
 
-  //Building link
-  const hostname = window.location.hostname; // Only includes hostname
-  const linkToCopy = `${window.location.protocol}//${hostname}/thread/${props.id}`;
+  // //Building link
+  // const hostname = window.location.hostname; // Only includes hostname
+  // const linkToCopy = `${window.location.protocol}//${hostname}/thread/${props.id}`;
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hostname = window.location.hostname;
+      setLinkToCopy(
+        `${window.location.protocol}//${hostname}/thread/${props.id}`
+      );
+    }
+  }, []);
 
   const clickCopyLink = async () => {
     try {
