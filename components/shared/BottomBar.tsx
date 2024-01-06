@@ -20,7 +20,7 @@ export default function BottomBar() {
             <Link
               href={link.route}
               key={link.label}
-              className={`bottombar_link ${isActive && 'bg-primary-500'}`}
+              className={`bottombar_link ${isActive && 'dark:bg-primary-500 bg-lightmode-4'}`}
             >
               <Image
                 src={link.imgURL}
