@@ -29,6 +29,7 @@ async function page({ params }: { params: { id: string } }) {
           currentUserId={user.id}
           parentId={thread.parentId}
           quoteId={thread.quoteId}
+          mediaLink={thread.mediaLink}
           content={thread.text}
           author={thread.author}
           community={thread.community}
@@ -54,6 +55,7 @@ async function page({ params }: { params: { id: string } }) {
             parentId={childItem.parentId}
             quoteId={childItem.quoteId}
             content={childItem.text}
+            mediaLink={childItem.mediaLink}
             author={childItem.author}
             community={childItem.community}
             createdAt={childItem.createdAt}

@@ -25,8 +25,8 @@ export default async function Home() {
                 id={post._id}
                 currentUserId={user.id}
                 parentId={post.parentId}
-                
-          quoteId={post.quoteId}
+                mediaLink={post.mediaLink}
+                quoteId={post.quoteId}
                 content={post.text}
                 author={post.author}
                 community={post.community}

@@ -32,6 +32,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           parentId={thread.parentId}
           quoteId={thread.quoteId}
           content={thread.text}
+          mediaLink={thread.mediaLink}
           author={thread.author}
           community={thread.community}
           createdAt={thread.createdAt}
