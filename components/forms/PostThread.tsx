@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { UploadDropzone } from "@/lib/uploadthing2";
 import { ThreadValidation } from "@/lib/validation/thread";
 import { createThread } from "@/lib/actions/thread.action";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 interface Props {
   userId: string;
 }
@@ -117,7 +117,7 @@ function PostThread({ userId }: Props) {
           className="mx-auto p-4 dark:bg-primary-500 bg-lightmode-4 dark:ut-button:bg-indigo-500 dark:ut-label:text-black ut-button:bg-lightmode-2
           dark:ut-upload-icon:text-black dark:ut-allowed-content:text-black ut-label:text-white ut-upload-icon:text-white ut-allowed-content:text-white"
           endpoint="media"
-          onClientUploadComplete={(res) => {
+          onClientUploadComplete={(res: { url: SetStateAction<string>; }[]) => {
             if (res) {
               console.log("Files: ", res);
               setMediaLink(res[0].url);

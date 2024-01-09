@@ -20,7 +20,7 @@ import { CommentValidation } from "@/lib/validation/thread";
 import { addCommentToThread, addQuoteThread } from "@/lib/actions/thread.action";
 import { toast } from "react-toastify";
 import { UploadButton } from "@/lib/uploadthing2";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 interface Props {
     threadId: string;
@@ -125,7 +125,7 @@ const Quote = ({ threadId, currentUserImg, currentUserId }: Props) => {
           className="mx-auto p-4 w-[250px] dark:ut-button:bg-primary-500 dark:ut-label:text-white dark:ut-upload-icon:text-black dark:ut-allowed-content:text-white
           ut-button:bg-lightmode-4 ut-label:text-black ut-upload-icon:text-black ut-allowed-content:text-black"
           endpoint="media"
-          onClientUploadComplete={(res) => {
+          onClientUploadComplete={(res: { url: SetStateAction<string>; }[]) => {
             if (res) {
               console.log("Files: ", res);
               setMediaLink(res[0].url);
