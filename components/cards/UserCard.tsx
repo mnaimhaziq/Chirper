@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react"; 
+import { useEffect, useState } from "react"; 
 import { Button } from "../ui/button";
 import { fetchFollowing, fetchUser, updateFollowing } from "@/lib/actions/user.action";
+import User from "@/lib/models/user.model";
 
 interface Props {
   currentUser: string;
-  // following: Array<string>
+  _id: string;
   id: string;
   name: string;
   username: string;
@@ -16,12 +17,36 @@ interface Props {
   personType: string;
 }
 
-function UserCard({currentUser, id, name, username, imgUrl, personType}: Props) {
+function UserCard({currentUser, _id, id, name, username, imgUrl, personType}: Props) {
   const router = useRouter();
   const [isFollowing, setIsFollowing] = useState(false);
 
-  
+  useEffect(() => {
+    const renderThis = async () => {
+      const realUser = await fetchUser(currentUser);
+    
+    if(realUser.following.includes(_id)){
+      setIsFollowing(true);
+    }
+    }
+    renderThis();
+  }, []);
 
+  // const renderThis = async () => {
+  //   const realUser = await fetchUser(currentUser);
+  //   console.log("Following :"+ realUser.following)
+  
+  // if(realUser.following.map((item : any) => item.id).includes(id)){
+  //   setIsFollowing(true);
+  // }
+  // }
+
+  
+  // const realUser = await fetchUser(currentUser);
+
+  // if(realUser.following.includes(id)){
+  //   setIsFollowing(true);
+  // }
   // if(following.includes(id)){
   //   setIsFollowing(true);
   // }

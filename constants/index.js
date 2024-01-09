@@ -42,3 +42,8 @@ export const sidebarLinks = [
     { value: "members", label: "Members", icon: "/assets/members.svg" },
     { value: "requests", label: "Requests", icon: "/assets/request.svg" },
   ];
+
+  export const toggleButton = [
+    {route: "/", label: "follower"},
+    {route: "/following", label: "following"}
+  ]

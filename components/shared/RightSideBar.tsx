@@ -34,7 +34,7 @@ async function RightSidebar() {
               {suggestedCOmmunities.communities.map((community) => (
                 <UserCard
                   key={community.id}
-                  // following={followings}
+                  _id={community._id}
                   currentUser={user.id}
                   id={community.id}
                   name={community.name}
@@ -60,7 +60,7 @@ async function RightSidebar() {
               {similarMinds.users.map((person) => (
                 <UserCard
                   key={person.id}
-                  // following={followings}
+                  _id={person._id}
                   currentUser={user.id}
                   id={person.id}
                   name={person.name}

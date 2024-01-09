@@ -13,10 +13,12 @@ export async function fetchUser(userId: string) {
   try {
     connectToDB();
 
-    return await User.findOne({ id: userId }).populate({
+    const result = await User.findOne({ id: userId }).populate({
       path: "communities",
       model: Community,
     });
+
+    return JSON.parse(JSON.stringify(result)); 
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`);
   }
@@ -200,10 +202,6 @@ export async function updateFollowing(currentUser: string, targetUser: string) {
     // Find the target user
     const targetUserData = await User.findOne({ id: targetUser });
 
-    if (!targetUserData) {
-      throw new Error(`Target user with ID ${targetUser} not found.`);
-    }
-
     // Check if the currentUser is already following the targetUser
     if (!targetUserData) {
       throw new Error(`Target user with ID ${targetUser} not found.`);
@@ -214,12 +212,6 @@ export async function updateFollowing(currentUser: string, targetUser: string) {
       console.log(`User ${currentUser} is already following ${targetUser}.`);
       return; // Do nothing if already following
     }
-
-    // Update the targetUser's document to add the currentUser to the followers array
-    // await User.updateOne(
-    //   { id: targetUser },
-    //   { $push: { followers: currentUser } }
-    // );
     const currentUserObject = await fetchUser(currentUser);
 
     try {
@@ -233,12 +225,6 @@ export async function updateFollowing(currentUser: string, targetUser: string) {
     } catch (error) {
       console.log("error : " + error)
     }
-
-    // Update the currentUser's document to add the targetUser to the following array
-    // User.updateOne(
-    //   { id: currentUser },
-    //   { $push: { following: targetUser } }
-    // );
 
     const targetUserObject = await fetchUser(targetUser);
 

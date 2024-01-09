@@ -1,43 +1,29 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-
-const ToggleButtons: React.FC = () => {
-  const [activeButton, setActiveButton] = useState<'forYou' | 'following'>('forYou');
-
-  useEffect(() => {
-    console.log('ToggleButtons component mounted');
-  }, []);
-
-  const handleButtonClick = (button: 'forYou' | 'following') => {
-    setActiveButton(button);
-  };
+import React from "react";
+import { toggleButton } from "@/constants";
+import Link from "next/link";
+import { usePathname} from 'next/navigation';
+export default function ToggleButtons() {
+  const pathname = usePathname();
 
   return (
-    <div className="flex justify-center mb-4">
-      <Link href="/">
-        <div
-          onClick={() => handleButtonClick('forYou')}
-          className={`cursor-pointer bg-blue-500 text-white py-2 px-4 rounded focus:outline-none transition ${
-            activeButton === 'forYou' ? 'font-bold' : ''
-          }`}
-        >
-          <p className="text-light-1 max-lg:hidden">For You</p>
-        </div>
-      </Link>
-      <Link href="/following">
-        <div
-          onClick={() => handleButtonClick('following')}
-          className={`cursor-pointer bg-blue-500 text-white py-2 px-4 rounded focus:outline-none transition ${
-            activeButton === 'following' ? 'font-bold' : ''
-          }`}
-        >
-          <p className="text-light-1 max-lg:hidden">Following</p>
-        </div>
-      </Link>
-    </div>
-  );
-};
+    <section className="">
+      <div className="flex justify-center mb-4">
+        {toggleButton.map((link) => {
+          const isActive = (pathname.includes(link.route) && link.route.length > 1 ) || pathname === link.route;
 
-export default ToggleButtons;
+          return (
+            <Link
+              href={link.route}
+              key={link.label}
+              className={`cursor-pointer bg-blue-500 text-white py-2 px-4 rounded focus:outline-none transition ${isActive && 'bg-primary-500'}`}
+            >
+              <p className="text-light-1 max-lg:hidden">{link.label}</p>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

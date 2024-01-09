@@ -46,6 +46,7 @@ async function Page({
                 key={person.id}
                 // following={followings}
                 currentUser={user.id}
+                _id={person._id}
                 id={person.id}
                 name={person.name}
                 username={person.username}

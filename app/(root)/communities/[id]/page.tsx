@@ -76,6 +76,7 @@ async function Page({ params }: { params: { id: string } }) {
                   key={member.id}
                   // following={followings}
                   currentUser={user.id}
+                  _id={member._id}
                   id={member.id}
                   name={member.name}
                   username={member.username}
