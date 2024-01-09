@@ -1,5 +1,5 @@
 import ThreadCard from "@/components/cards/ThreadCard";
-import { fetchPosts } from "@/lib/actions/thread.action";
+import { fetchPosts, fetchPostsForFollowing } from "@/lib/actions/thread.action";
 import { UserButton, currentUser } from "@clerk/nextjs";
 import ToggleButtons from "@/components/ui/ToggleButtons";
 
@@ -7,7 +7,7 @@ export default async function Home() {
   const user = await currentUser();
   if (!user) return null;
 
-  const result = await fetchPosts(1, 30);
+  const result = await fetchPostsForFollowing(user.id,1, 30);
 
   return (
     <>

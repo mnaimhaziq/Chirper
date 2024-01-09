@@ -9,12 +9,20 @@ import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { fetchCommunityDetails } from "@/lib/actions/community.action";
+import { fetchUser } from "@/lib/actions/user.action";
 
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) return null;
 
   const communityDetails = await fetchCommunityDetails(params.id);
+
+  const realUser = await fetchUser(user.id);
+  var followings: any[] = [];
+  for(var i=0; i<realUser.following.length; i++){
+    followings.push(realUser.following.id);
+  }
+
 
   return (
     <section>
@@ -62,9 +70,12 @@ async function Page({ params }: { params: { id: string } }) {
 
           <TabsContent value='members' className='mt-9 w-full text-light-1'>
             <section className='mt-9 flex flex-col gap-10'>
-              {communityDetails.members.map((member: any) => (
+              {user && (<>
+                {communityDetails.members.map((member: any) => (
                 <UserCard
                   key={member.id}
+                  // following={followings}
+                  currentUser={user.id}
                   id={member.id}
                   name={member.name}
                   username={member.username}
@@ -72,6 +83,7 @@ async function Page({ params }: { params: { id: string } }) {
                   personType='User'
                 />
               ))}
+              </>)}
             </section>
           </TabsContent>
 
