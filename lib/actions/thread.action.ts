@@ -247,7 +247,7 @@ export async function fetchPostsForFollowing(currentUser: string, pageNumber = 1
 
   // Retrieve the IDs of users that the current user is following
   const followingIds = await User.findOne({ id: currentUser }).select('following');
-  console.log("Following Id: "+ followingIds)
+
 
   // Create a query to fetch posts from users in the followingIds array
   const postsQuery = Thread.find({

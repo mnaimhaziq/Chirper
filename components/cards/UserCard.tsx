@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"; 
 import { Button } from "../ui/button";
-import { fetchFollowing, fetchUser, updateFollowing } from "@/lib/actions/user.action";
+import { fetchFollowing, fetchUser, removeFollowing, updateFollowing } from "@/lib/actions/user.action";
 import User from "@/lib/models/user.model";
 
 interface Props {
@@ -32,33 +32,23 @@ function UserCard({currentUser, _id, id, name, username, imgUrl, personType}: Pr
     renderThis();
   }, []);
 
-  // const renderThis = async () => {
-  //   const realUser = await fetchUser(currentUser);
-  //   console.log("Following :"+ realUser.following)
-  
-  // if(realUser.following.map((item : any) => item.id).includes(id)){
-  //   setIsFollowing(true);
-  // }
-  // }
-
-  
-  // const realUser = await fetchUser(currentUser);
-
-  // if(realUser.following.includes(id)){
-  //   setIsFollowing(true);
-  // }
-  // if(following.includes(id)){
-  //   setIsFollowing(true);
-  // }
-
   const isCommunity = personType === "Community";
 
-  const handleFollowClick = () => {
-    // Assuming you have an updateFollowing function to handle follow logic
-    // Update the follow status in the UI (optimistically)
-    
-     updateFollowing(currentUser, id);
-     setIsFollowing(!isFollowing);
+  const handleFollowClick = async () => {
+    try {
+      if (isFollowing) {
+      // Unfollow logic
+      await removeFollowing(currentUser, _id);
+      } else {
+        // Follow logic
+        await updateFollowing(currentUser, id);
+      }
+
+      setIsFollowing(!isFollowing);
+    } catch (error) {
+      console.error("Error updating following: ", error);
+      // Handle error as needed
+    }
   };
 
   return (

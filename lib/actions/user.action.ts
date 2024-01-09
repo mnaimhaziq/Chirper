@@ -243,3 +243,31 @@ export async function updateFollowing(currentUser: string, targetUser: string) {
     throw error;
   }
 }
+
+export async function removeFollowing(currentUser: string, targetUser: string) {
+  try {
+    connectToDB(); // Assuming connectToDB is correctly implemented in your code
+
+    // Remove the currentUser from the followers of targetUser
+    await User.updateOne(
+      { _id: targetUser },
+      {
+        $pull: { followers: currentUser }
+      }
+    );
+
+    // Remove the targetUser from the following of currentUser
+    await User.updateOne(
+      { id: currentUser },
+      {
+        $pull: { following: targetUser }
+      }
+    );
+
+    console.log(`User ${currentUser} is no longer following ${targetUser}.`);
+
+  } catch (error) {
+    console.error("Error removing following: ", error);
+    throw error;
+  }
+}
