@@ -5,6 +5,10 @@ const threadSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  mediaLink:{
+    type: String,
+    required: false,
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

@@ -15,6 +15,7 @@ interface Props {
   parentId: string | null;
   quoteId: string | null;
   content: string;
+  mediaLink: string;
   author: {
     name: string;
     image: string;
@@ -40,6 +41,7 @@ async function ThreadCard({
   parentId,
   quoteId,
   content,
+  mediaLink,
   author,
   community,
   createdAt,
@@ -55,6 +57,18 @@ async function ThreadCard({
     originalThread = await fetchThreadById(quoteId);
   }
 
+  const getMediaType = (url?: string) => {
+    const extension = url?.split(".").pop()?.toLowerCase();
+
+    if (extension === "mp4" || extension === "webm") {
+      return "video";
+    }
+
+    return "image";
+  };
+
+  const mediaType = getMediaType(mediaLink);
+  
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
@@ -84,18 +98,37 @@ async function ThreadCard({
             </Link>
 
             <p className="mt-2 text-small-regular dark:text-light-2 text-dark-2">{content}</p>
-            {quoteId && (
-                <QuoteCard
-                  id={originalThread._id}
-                  currentUserId={user.id}
-                  parentId={originalThread.parentId}
-                  quoteId={quoteId}
-                  content={originalThread.text}
-                  author={originalThread.author}
-                  community={originalThread.community}
-                  createdAt={originalThread.createdAt}
-                  comments={originalThread.children}
+
+            {mediaLink !== null && mediaLink !== "" && mediaLink? (
+              mediaType === "image" ? (
+                <img
+                  className="mt-4"
+                  src={mediaLink}
+                  alt="threadImage"
+                  width={400}
+                  height={200}
                 />
+              ) : mediaType === "video" ? (
+                <video className="mt-4" width={400} height={200} controls>
+                  <source src={mediaLink} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : null
+            ) : null}
+
+            {quoteId && (
+              <QuoteCard
+                id={originalThread._id}
+                currentUserId={user.id}
+                parentId={originalThread.parentId}
+                quoteId={quoteId}
+                content={originalThread.text}
+                mediaLink={originalThread.mediaLink}
+                author={originalThread.author}
+                community={originalThread.community}
+                createdAt={originalThread.createdAt}
+                comments={originalThread.children}
+              />
             )}
 
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>

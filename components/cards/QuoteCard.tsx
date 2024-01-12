@@ -10,6 +10,7 @@ interface Props {
   parentId: string | null;
   quoteId: string | null;
   content: string;
+  mediaLink: string;
   author: {
     name: string;
     image: string;
@@ -35,6 +36,7 @@ const QuoteCard = ({
   parentId,
   quoteId,
   content,
+  mediaLink,
   author,
   community,
   createdAt,
@@ -42,7 +44,17 @@ const QuoteCard = ({
   isComment,
 }: Props) => {
 
+const getMediaType = (url?: string) => {
+  const extension = url?.split(".").pop()?.toLowerCase();
 
+  if (extension === "mp4" || extension === "webm") {
+    return "video";
+  }
+
+  return "image";
+};
+
+  const mediaType = getMediaType(mediaLink);
   return (
     <article
       className={`flex w-full flex-col rounded-xl dark:bg-slate-800 bg-lightmode-3 mt-4 ${isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7 py-5"
@@ -75,10 +87,24 @@ const QuoteCard = ({
               </Link>
             </div>
 
-
             <p className='mt-2 text-small-regular dark:text-light-2 text-light-1'>{content}</p>
 
-
+            {mediaLink !== null && mediaLink !== "" && mediaLink ? (
+              mediaType === "image" ? (
+                <img
+                  className="mt-4"
+                  src={mediaLink}
+                  alt="threadImage"
+                  width={400}
+                  height={200}
+                />
+              ) : mediaType === "video" ? (
+                <video className="mt-4" width={400} height={200} controls>
+                  <source src={mediaLink} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : null
+            ) : null}
           </div>
         </div>
       </div>
