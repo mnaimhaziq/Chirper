@@ -53,9 +53,10 @@ interface Params {
   author: string,
   communityId: string | null,
   path: string,
+  mediaLink: string
 }
 
-export async function createThread({ text, author, communityId, path }: Params
+export async function createThread({ text, author, communityId, path, mediaLink, }: Params
 ) {
   try {
     connectToDB();
@@ -68,7 +69,8 @@ export async function createThread({ text, author, communityId, path }: Params
     const createdThread = await Thread.create({
       text,
       author,
-      community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      community: communityIdObject,
+      mediaLink, // Assign communityId if provided, or leave it null for personal account
     });
     console.log(createdThread);
     // Update User model
@@ -242,6 +244,7 @@ export async function addCommentToThread(
 export async function addQuoteThread(
   threadId: string,
   quoteText: string,
+  quoteMediaLink: string,
   userId: string,
   path: string
  ) {
@@ -254,10 +257,11 @@ export async function addQuoteThread(
       throw new Error("Thread not found");
     }
 
-       const quoteThread = new Thread({
+    const quoteThread = new Thread({
       text: quoteText,
       author: userId,
-      quoteId: threadId, 
+      mediaLink: quoteMediaLink,
+      quoteId: threadId,
     })
 
     // Save the quote thread to the database

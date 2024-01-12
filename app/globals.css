@@ -3,14 +3,19 @@
 @tailwind utilities;
 
 @layer components {
+
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply flex min-h-screen flex-1 flex-col items-center dark:bg-dark-1 bg-lightmode-0 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+  }
+
+  .sub-container {
+    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-10 max-md:pb-32 sm:px-10;
   }
 
   /* Head Text */
   .head-text {
-    @apply text-heading2-bold text-light-1;
+    @apply text-heading2-bold dark:text-light-1 text-dark-1;
   }
 
   /* Activity */
@@ -20,16 +25,16 @@
 
   /* No Result */
   .no-result {
-    @apply text-center !text-base-regular text-light-3;
+    @apply text-center !text-base-regular dark:text-light-3 text-dark-3;
   }
 
   /* Community Card */
   .community-card {
-    @apply w-full rounded-lg bg-dark-3 px-4 py-5 sm:w-96;
+    @apply w-full rounded-lg dark:bg-dark-3 bg-lightmode-1 px-4 py-5 sm:w-96;
   }
 
   .community-card_btn {
-    @apply rounded-lg bg-primary-500 px-5 py-1.5 text-small-regular !text-light-1 !important;
+    @apply rounded-lg dark:bg-primary-500 bg-lightmode-4 px-5 py-1.5 text-small-regular !text-light-1 !important;
   }
 
   /* thread card  */
@@ -47,19 +52,19 @@
   }
 
   .user-card_btn {
-    @apply h-auto min-w-[74px] rounded-lg bg-primary-500 text-[12px] text-light-1 !important;
+    @apply h-auto min-w-[74px] rounded-lg dark:bg-primary-500 bg-lightmode-4 text-[12px] text-light-1 !important;
   }
 
   .searchbar {
-    @apply flex gap-1 rounded-lg bg-dark-3 px-4 py-2;
+    @apply flex gap-1 rounded-lg dark:bg-dark-3 bg-lightmode-1 px-4 py-2;
   }
 
   .searchbar_input {
-    @apply border-none bg-dark-3 text-base-regular text-light-4 outline-none !important;
+    @apply border-none dark:bg-dark-3 bg-lightmode-1 text-base-regular text-light-4 outline-none !important;
   }
 
   .topbar {
-    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+    @apply fixed top-0 z-30 flex w-full items-center justify-between dark:bg-dark-2 bg-lightmode-1 px-6 py-3;
   }
 
   .bottombar {
@@ -75,11 +80,15 @@
   }
 
   .leftsidebar {
-    @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-dark-4 bg-dark-2 pb-5 pt-28 max-md:hidden;
+    @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r dark:border-r-dark-4 border-l-lightmode-1 dark:bg-dark-2 bg-lightmode-1 pb-5 pt-28 max-md:hidden;
   }
 
   .leftsidebar_link {
     @apply relative flex justify-start gap-4 rounded-lg p-4;
+  }
+
+  .leftsidebar-dm {
+    @apply sticky left-0 top-0 z-0 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-r border-r-dark-4 bg-dark-1 pb-5 pt-5 max-md:hidden;
   }
 
   .pagination {
@@ -87,7 +96,7 @@
   }
 
   .rightsidebar {
-    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-dark-4 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
+    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l dark:border-l-dark-4 border-l-lightmode-1 dark:bg-dark-2 bg-lightmode-1 px-10 pb-6 pt-28 max-xl:hidden;
   }
 }
 
@@ -121,17 +130,23 @@
   @apply max-sm:hidden;
 }
 
-.cl-organizationSwitcherTrigger
-  .cl-organizationPreview
-  .cl-organizationPreviewTextContainer {
+.cl-organizationSwitcherTrigger .cl-organizationPreview .cl-organizationPreviewTextContainer {
   @apply max-sm:hidden;
+}
+
+.dark .cl-internal-10ndrz0 {
+  background-color: transparent;
+}
+
+.cl-internal-10ndrz0 {
+  background-color: #8c624c;
 }
 
 /* Shadcn Component Styles */
 
 /* Tab */
 .tab {
-  @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-light-2 data-[state=active]:bg-[#0e0e12] data-[state=active]:text-light-2 !important;
+  @apply flex min-h-[50px] flex-1 items-center gap-3 dark:bg-dark-2 bg-lightmode-1 dark:text-light-2 text-dark-2 dark:data-[state=active]:bg-[#0e0e12] data-[state=active]:bg-lightmode-3 dark:data-[state=active]:text-light-2 !important;
 }
 
 .no-focus {
@@ -157,5 +172,5 @@
 }
 
 .comment-form_btn {
-  @apply rounded-3xl bg-primary-500 px-8 py-2 !text-small-regular text-light-1 max-xs:w-full !important;
+  @apply rounded-3xl dark:bg-primary-500 bg-lightmode-4 px-8 py-2 !text-small-regular text-light-1 max-xs:w-full !important;
 }
