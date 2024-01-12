@@ -7,7 +7,7 @@ import UserCard from "@/components/cards/UserCard";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { fetchUser } from "@/lib/actions/user.action";
 import { fetchCommunityDetails } from "@/lib/actions/community.action";
 
 async function Page({ params }: { params: { id: string } }) {
@@ -16,6 +16,11 @@ async function Page({ params }: { params: { id: string } }) {
 
   const communityDetails = await fetchCommunityDetails(params.id);
 
+  const realUser = await fetchUser(user.id);
+  var followings: any[] = [];
+  for(var i=0; i<realUser.following.length; i++){
+    followings.push(realUser.following.id);
+  }
   return (
     <section>
       <ProfileHeader
@@ -62,9 +67,12 @@ async function Page({ params }: { params: { id: string } }) {
 
           <TabsContent value='members' className='mt-9 w-full text-light-1'>
             <section className='mt-9 flex flex-col gap-10'>
-              {communityDetails.members.map((member: any) => (
+            {user && (<>
+                {communityDetails.members.map((member: any) => (
                 <UserCard
                   key={member.id}
+                  currentUser={user.id}
+                  _id={member._id}
                   id={member.id}
                   name={member.name}
                   username={member.username}
@@ -72,6 +80,7 @@ async function Page({ params }: { params: { id: string } }) {
                   personType='User'
                 />
               ))}
+               </>)}
             </section>
           </TabsContent>
 

@@ -3,8 +3,7 @@ import { currentUser } from "@clerk/nextjs";
 import UserCard from "../cards/UserCard";
 
 import { fetchCommunities } from "@/lib/actions/community.action";
-import { fetchUsers } from "@/lib/actions/user.action";
-
+import { fetchUser, fetchUsers } from "@/lib/actions/user.action";
 async function RightSidebar() {
   const user = await currentUser();
   if (!user) return null;
@@ -13,6 +12,13 @@ async function RightSidebar() {
     userId: user.id,
     pageSize: 4,
   });
+
+  const realUser = await fetchUser(user.id);
+  var followings: any[] = [];
+  for(var i=0; i<realUser.following.length; i++){
+    followings.push(realUser.following.id);
+  }
+
 
   const suggestedCOmmunities = await fetchCommunities({ pageSize: 4 });
 
@@ -29,6 +35,8 @@ async function RightSidebar() {
               {suggestedCOmmunities.communities.map((community) => (
                 <UserCard
                   key={community.id}
+                  _id={community._id}
+                  currentUser={user.id}
                   id={community.id}
                   name={community.name}
                   username={community.username}
@@ -53,6 +61,8 @@ async function RightSidebar() {
               {similarMinds.users.map((person) => (
                 <UserCard
                   key={person.id}
+                  _id={person._id}
+                  currentUser={user.id}
                   id={person.id}
                   name={person.name}
                   username={person.username}

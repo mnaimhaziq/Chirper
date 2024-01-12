@@ -24,6 +24,13 @@ async function Page({
     pageSize: 25,
   });
 
+  const realUser = await fetchUser(user.id);
+  var followings: any[] = [];
+  for(var i=0; i<realUser.following.length; i++){
+    followings.push(realUser.following.id);
+  };
+
+  
   return (
     <section>
       <h1 className='head-text mb-10'>Search</h1>
@@ -38,6 +45,8 @@ async function Page({
             {result.users.map((person) => (
               <UserCard
                 key={person.id}
+                currentUser={user.id}
+                _id={person._id}
                 id={person.id}
                 name={person.name}
                 username={person.username}

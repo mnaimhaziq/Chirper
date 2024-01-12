@@ -241,6 +241,54 @@ export async function addCommentToThread(
   }
 }
 
+export async function fetchPostsForFollowing(currentUser: string, pageNumber = 1, pageSize = 20) {
+  connectToDB();
+
+  // Calculate the number of posts to skip based on the page number and page size.
+  const skipAmount = (pageNumber - 1) * pageSize;
+
+  // Retrieve the IDs of users that the current user is following
+  const followingIds = await User.findOne({ id: currentUser }).select('following');
+
+
+  // Create a query to fetch posts from users in the followingIds array
+  const postsQuery = Thread.find({
+    parentId: { $in: [null, undefined] }, // Threads that have no parent (top-level threads)
+    author: { $in: followingIds.following }, // Posts from users in the followingIds array
+  })
+    .sort({ createdAt: 'desc' })
+    .skip(skipAmount)
+    .limit(pageSize)
+    .populate({
+      path: 'author',
+      model: User,
+    })
+    .populate({
+      path: 'community',
+      model: Community,
+    })
+    .populate({
+      path: "children", // Populate the children field
+      populate: {
+        path: "author", // Populate the author field within children
+        model: User,
+        select: "_id name parentId image", // Select only _id and username fields of the author
+      },
+    });
+
+  // Count the total number of top-level posts (threads) from users in the followingIds array
+  const totalPostsCount = await Thread.countDocuments({
+    parentId: { $in: [null, undefined] },
+    author: { $in: followingIds.following },
+  });
+
+  const posts = await postsQuery.exec();
+
+  const isNext = totalPostsCount > skipAmount + posts.length;
+
+  return { posts, isNext };
+}
+
 export async function addQuoteThread(
   threadId: string,
   quoteText: string,

@@ -15,14 +15,17 @@ export async function fetchUser(userId: string) {
   try {
     connectToDB();
 
-    return await User.findOne({ id: userId }).populate({
+    const result = await User.findOne({ id: userId }).populate({
       path: "communities",
       model: Community,
     });
+
+    return JSON.parse(JSON.stringify(result)); 
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`);
   }
 }
+
 
 interface Params {
   userId: string;
@@ -184,7 +187,67 @@ export async function getActivity(userId: string) {
   }
 }
 
+export async function updateFollowing(currentUser: string, targetUser: string) {
+  try {
+    connectToDB();
+    // Find the target user
+    const targetUserData = await User.findOne({ id: targetUser });
 
+    // Check if the currentUser is already following the targetUser
+    if (!targetUserData) {
+      throw new Error(`Target user with ID ${targetUser} not found.`);
+    }
+
+    // Check if the currentUser is already following the targetUser
+    if (targetUserData.followers && targetUserData.followers.includes(currentUser)) {
+      console.log(`User ${currentUser} is already following ${targetUser}.`);
+      return; // Do nothing if already following
+    }
+    const currentUserObject = await fetchUser(currentUser);
+
+// export async function getUserReplies(userId: mongoose.Schema.Types.ObjectId) {
+//   try {
+//     connectToDB();
+    try {
+      await User.findOneAndUpdate(
+        { id: targetUser },
+        {
+          $push: { followers: currentUserObject } 
+        },
+        { upsert: true }
+      );
+    } catch (error) {
+      console.log("error : " + error)
+    }
+
+//     // Find all threads authored by the user with the given userId
+//     const userReplies = await Thread.find({
+//       author: userId,
+//       parentId: { $ne: null }, // Replies have non-null parentId
+//     });
+    const targetUserObject = await fetchUser(targetUser);
+
+//     return userReplies;
+//   } catch (error) {
+//     console.error("Error fetching user replies:", error);
+//     throw error;
+//   }
+// }
+    await User.findOneAndUpdate(
+      { id: currentUser },
+      {
+        $push: { following: targetUserObject }  
+      },
+      { upsert: true }
+    );
+
+    console.log(`User ${currentUser} is now following ${targetUser}.`);
+
+  } catch (error) {
+    console.error("Error updating following: ", error);
+    throw error;
+  }
+}
 // export async function getUserReplies(userId: mongoose.Schema.Types.ObjectId) {
 //   try {
 //     connectToDB();
@@ -247,6 +310,34 @@ export async function getThreadsByUser(userId: mongoose.Schema.Types.ObjectId) {
     return threads;
   } catch (error) {
     console.error("Error fetching user replies:", error);
+    throw error;
+  }
+}
+
+export async function removeFollowing(currentUser: string, targetUser: string) {
+  try {
+    connectToDB(); // Assuming connectToDB is correctly implemented in your code
+
+    // Remove the currentUser from the followers of targetUser
+    await User.updateOne(
+      { _id: targetUser },
+      {
+        $pull: { followers: currentUser }
+      }
+    );
+
+    // Remove the targetUser from the following of currentUser
+    await User.updateOne(
+      { id: currentUser },
+      {
+        $pull: { following: targetUser }
+      }
+    );
+
+    console.log(`User ${currentUser} is no longer following ${targetUser}.`);
+
+  } catch (error) {
+    console.error("Error removing following: ", error);
     throw error;
   }
 }

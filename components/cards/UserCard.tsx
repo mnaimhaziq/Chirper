@@ -2,10 +2,14 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { fetchFollowing, fetchUser, removeFollowing, updateFollowing } from "@/lib/actions/user.action";
+import User from "@/lib/models/user.model";
 
 interface Props {
+  currentUser: string;
+  _id: string;
   id: string;
   name: string;
   username: string;
@@ -13,10 +17,41 @@ interface Props {
   personType: string;
 }
 
-function UserCard({ id, name, username, imgUrl, personType }: Props) {
+function UserCard({currentUser, _id, id, name, username, imgUrl, personType }: Props) {
   const router = useRouter();
 
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    const renderThis = async () => {
+      const realUser = await fetchUser(currentUser);
+
+    if(realUser.following.includes(_id)){
+      setIsFollowing(true);
+    }
+    }
+    renderThis();
+  }, []);
+
   const isCommunity = personType === "Community";
+
+  const handleFollowClick = async () => {
+    try {
+      if (isFollowing) {
+      // Unfollow logic
+      await removeFollowing(currentUser, _id);
+      } else {
+        // Follow logic
+        await updateFollowing(currentUser, id);
+      }
+
+      setIsFollowing(!isFollowing);
+    } catch (error) {
+      console.error("Error updating following: ", error);
+      // Handle error as needed
+    }
+  };
+
 
   return (
     <article className='user-card'>
@@ -38,15 +73,9 @@ function UserCard({ id, name, username, imgUrl, personType }: Props) {
 
       <Button
         className='user-card_btn'
-        onClick={() => {
-          if (isCommunity) {
-            router.push(`/communities/${id}`);
-          } else {
-            router.push(`/profile/${id}`);
-          }
-        }}
+        onClick={() => handleFollowClick()}
       >
-        View
+           {isFollowing ? "Unfollow" : "Follow"}
       </Button>
     </article>
   );
