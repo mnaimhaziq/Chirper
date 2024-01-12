@@ -7,12 +7,15 @@ import TopBar from "@/components/shared/TopBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
 import RightSideBar from "@/components/shared/RightSideBar";
 import BottomBar from "@/components/shared/BottomBar";
+import { ToastContainer } from "react-toastify";
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Threads",
-  description: "A Next.js 13 Meta Threads application",
+  title: "Chirper",
+  description: "A chirper application",
 };
 
 export default function RootLayout({
@@ -24,6 +27,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.className} `}>
+        <ToastContainer theme="colored"/>
           <TopBar />
           <main className="flex flex-row">
             <LeftSideBar />

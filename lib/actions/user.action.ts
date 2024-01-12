@@ -8,6 +8,8 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 
 import { connectToDB } from "../mongoose";
+import mongoose from "mongoose";
+
 
 export async function fetchUser(userId: string) {
   try {
@@ -244,6 +246,37 @@ export async function updateFollowing(currentUser: string, targetUser: string) {
   }
 }
 
+export async function getUserReplies(userId: mongoose.Schema.Types.ObjectId) {
+  try {
+    connectToDB();
+
+    // Find both parent threads and their replies authored by the user with the given userId
+    const replies = await Thread.find({
+      $or: [
+        // { author: userId, parentId: null }, // Parent threads
+        { author: userId, parentId: { $ne: null } }, // Replies
+      ],
+    });
+
+    // Extract unique parentIds from the replies
+    const parentIds = [...new Set(replies.map(reply => reply.parentId))];
+
+    // Convert parentIds to ObjectId type
+    const parentObjectIds = parentIds.map(parentId => new mongoose.Types.ObjectId(parentId));
+
+    // Fetch original threads based on the converted ObjectIds
+    const originalThreads = await Thread.find({ _id: { $in: parentObjectIds } });
+
+    // console.log(originalThreads);
+
+    return originalThreads;
+  } catch (error) {
+    console.error("Error fetching user replies:", error);
+    throw error;
+  }
+}
+
+
 export async function removeFollowing(currentUser: string, targetUser: string) {
   try {
     connectToDB(); // Assuming connectToDB is correctly implemented in your code
@@ -268,6 +301,26 @@ export async function removeFollowing(currentUser: string, targetUser: string) {
 
   } catch (error) {
     console.error("Error removing following: ", error);
+    throw error;
+  }
+}
+
+    
+export async function getThreadsByUser(userId: mongoose.Schema.Types.ObjectId) {
+  try {
+    connectToDB();
+
+    // Find both parent thread and its replies authored by the user with the given userId
+    const threads = await Thread.find({
+      $or: [
+        { author: userId, parentId: null }, // Original threads
+        // { author: userId, parentId: { $ne: null } }, // Replies
+      ],
+    });
+
+    return threads;
+  } catch (error) {
+    console.error("Error fetching user replies:", error);
     throw error;
   }
 }

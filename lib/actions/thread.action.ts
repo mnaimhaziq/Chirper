@@ -53,9 +53,10 @@ interface Params {
   author: string,
   communityId: string | null,
   path: string,
+  mediaLink: string
 }
 
-export async function createThread({ text, author, communityId, path }: Params
+export async function createThread({ text, author, communityId, path, mediaLink, }: Params
 ) {
   try {
     connectToDB();
@@ -68,7 +69,8 @@ export async function createThread({ text, author, communityId, path }: Params
     const createdThread = await Thread.create({
       text,
       author,
-      community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      community: communityIdObject,
+      mediaLink, // Assign communityId if provided, or leave it null for personal account
     });
     console.log(createdThread);
     // Update User model
@@ -286,3 +288,38 @@ export async function fetchPostsForFollowing(currentUser: string, pageNumber = 1
 
   return { posts, isNext };
 }
+
+
+export async function addQuoteThread(
+  threadId: string,
+  quoteText: string,
+  quoteMediaLink: string,
+  userId: string,
+  path: string
+ ) {
+  try {
+    connectToDB();
+
+    const originalThread = await Thread.findById(threadId);
+
+    if (!originalThread) {
+      throw new Error("Thread not found");
+    }
+
+    const quoteThread = new Thread({
+      text: quoteText,
+      author: userId,
+      mediaLink: quoteMediaLink,
+      quoteId: threadId,
+    })
+
+    // Save the quote thread to the database
+    const savedQuoteThread = await quoteThread.save();
+
+    revalidatePath(path);
+    return savedQuoteThread;
+  } catch (error: any) {
+    throw new Error(`Failed to create thread: ${error.message}`);
+  }
+}
+

@@ -9,13 +9,22 @@ import { currentUser } from "@clerk/nextjs";
 import ShareButton from "../ui/ShareButton";
 // import DeleteThread from "../forms/DeleteThread";
 
+interface Comment {
+  id: string;
+  content: string;
+  author: {
+    name: string;
+    image: string;
+    id: string;
+  };
+  createdAt: string;
+}
+
 interface Props {
   id: string;
   currentUserId: string;
   parentId: string | null;
-  quoteId: string | null;
   content: string;
-  mediaLink: string;
   author: {
     name: string;
     image: string;
@@ -27,21 +36,15 @@ interface Props {
     image: string;
   } | null;
   createdAt: string;
-  comments: {
-    author: {
-      image: string;
-    };
-  }[];
+  comments: Comment[];
   isComment?: boolean;
 }
 
-async function ThreadCard({
+async function RepliedCard({
   id,
   currentUserId,
   parentId,
-  quoteId,
   content,
-  mediaLink,
   author,
   community,
   createdAt,
@@ -51,28 +54,17 @@ async function ThreadCard({
   const user = await currentUser();
   if (!user) return null;
 
-  let originalThread = null;
+  // let originalThread = null;
 
-  if (quoteId !== null) {
-    originalThread = await fetchThreadById(quoteId);
-  }
+  // if (quoteId !== null) {
+  //   originalThread = await fetchThreadById(quoteId);
+  // }
+  // console.log(author)
 
-  const getMediaType = (url?: string) => {
-    const extension = url?.split(".").pop()?.toLowerCase();
-
-    if (extension === "mp4" || extension === "webm") {
-      return "video";
-    }
-
-    return "image";
-  };
-
-  const mediaType = getMediaType(mediaLink);
-  
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
-        isComment ? "px-0 xs:px-7" : "dark:bg-dark-2 bg-lightmode-1 p-7"
+        isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
       }`}
     >
       <div className="flex items-start justify-between">
@@ -92,44 +84,25 @@ async function ThreadCard({
 
           <div className="flex w-full flex-col">
             <Link href={`/profile/${author.id}`} className="w-fit">
-              <h4 className="cursor-pointer text-base-semibold dark:text-light-1 text-dark-1">
+              <h4 className="cursor-pointer text-base-semibold text-light-1">
                 {author.name}
               </h4>
             </Link>
 
-            <p className="mt-2 text-small-regular dark:text-light-2 text-dark-2">{content}</p>
-
-            {mediaLink !== null && mediaLink !== "" && mediaLink? (
-              mediaType === "image" ? (
-                <img
-                  className="mt-4"
-                  src={mediaLink}
-                  alt="threadImage"
-                  width={400}
-                  height={200}
+            <p className="mt-2 text-small-regular text-light-2">{content}</p>
+            {/* {quoteId && (
+                <QuoteCard
+                  id={originalThread._id}
+                  currentUserId={user.id}
+                  parentId={originalThread.parentId}
+                  quoteId={quoteId}
+                  content={originalThread.text}
+                  author={originalThread.author}
+                  community={originalThread.community}
+                  createdAt={originalThread.createdAt}
+                  comments={originalThread.children}
                 />
-              ) : mediaType === "video" ? (
-                <video className="mt-4" width={400} height={200} controls>
-                  <source src={mediaLink} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : null
-            ) : null}
-
-            {quoteId && (
-              <QuoteCard
-                id={originalThread._id}
-                currentUserId={user.id}
-                parentId={originalThread.parentId}
-                quoteId={quoteId}
-                content={originalThread.text}
-                mediaLink={originalThread.mediaLink}
-                author={originalThread.author}
-                community={originalThread.community}
-                createdAt={originalThread.createdAt}
-                comments={originalThread.children}
-              />
-            )}
+            )} */}
 
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
@@ -199,6 +172,7 @@ async function ThreadCard({
               height={24}
               className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
             />
+            // <p>Test</p>
           ))}
 
           <Link href={`/thread/${id}`}>
@@ -233,4 +207,4 @@ async function ThreadCard({
   );
 }
 
-export default ThreadCard;
+export default RepliedCard;

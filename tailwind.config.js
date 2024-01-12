@@ -1,5 +1,6 @@
+const { withUt } = require("uploadthing/tw");
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+module.exports = withUt({
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -187,6 +188,18 @@ module.exports = {
         "light-3": "#7878A3",
         "light-4": "#5C5C7B",
         "gray-1": "#697C89",
+        "dark": '#232A3C',
+        "medium": '#293245',
+        "beige": '#f5f5dc',
+        "purple-1": '#F1EAFF',
+        "purple-2": '#E5D4FF',
+        "purple-3": '#DCBFFF',
+        "purple-4": '#D0A2F7',
+        "lightmode-0": '#fafafa',
+        "lightmode-1": '#ffe9dc',
+        "lightmode-2": '#8c624c',
+        "lightmode-3": '#be9167',
+        "lightmode-4": '#673e2f',
         glassmorphism: "rgba(16, 16, 18, 0.60)",
       },
       boxShadow: {
@@ -213,4 +226,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-};
+});
