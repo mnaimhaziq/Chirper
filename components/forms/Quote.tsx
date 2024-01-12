@@ -3,7 +3,7 @@
 import { z } from "zod";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -31,6 +31,7 @@ const Quote = ({ threadId, currentUserImg, currentUserId }: Props) => {
   const pathname = usePathname();
   const [mediaLink, setMediaLink] = useState<string>("");
 
+  const router = useRouter();
   const form = useForm<z.infer<typeof CommentValidation>>({
     resolver: zodResolver(CommentValidation),
     defaultValues: {
@@ -50,6 +51,7 @@ const Quote = ({ threadId, currentUserImg, currentUserId }: Props) => {
     if (quoteThread) {
       toast.success("Quote sent successfully");
       form.reset();
+      router.replace('/')
     }
   };
 

@@ -125,7 +125,7 @@ export default function Chat({ chatRoomId, ownerId, otherUserId }: any) {
         <>
             <div className="relative w-full p-6 overflow-y-auto h-[35rem]">
                 <div className="flex flex-col space-y-2 p-4">
-                    {messages.map((message) => (
+                    {messages?.map((message) => (
                         message.senderId == ownerId ? <div className={'flex mb-4 justify-end'}>
                             <div className="rounded-lg p-3 max-w-xs bg-primary-500 text-white">
                                 {message.text}
