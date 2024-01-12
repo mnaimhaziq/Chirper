@@ -8,6 +8,8 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 
 import { connectToDB } from "../mongoose";
+import mongoose from "mongoose";
+
 
 export async function fetchUser(userId: string) {
   try {
@@ -178,6 +180,73 @@ export async function getActivity(userId: string) {
     return replies;
   } catch (error) {
     console.error("Error fetching replies: ", error);
+    throw error;
+  }
+}
+
+
+// export async function getUserReplies(userId: mongoose.Schema.Types.ObjectId) {
+//   try {
+//     connectToDB();
+
+//     // Find all threads authored by the user with the given userId
+//     const userReplies = await Thread.find({
+//       author: userId,
+//       parentId: { $ne: null }, // Replies have non-null parentId
+//     });
+
+//     return userReplies;
+//   } catch (error) {
+//     console.error("Error fetching user replies:", error);
+//     throw error;
+//   }
+// }
+
+export async function getUserReplies(userId: mongoose.Schema.Types.ObjectId) {
+  try {
+    connectToDB();
+
+    // Find both parent threads and their replies authored by the user with the given userId
+    const replies = await Thread.find({
+      $or: [
+        // { author: userId, parentId: null }, // Parent threads
+        { author: userId, parentId: { $ne: null } }, // Replies
+      ],
+    });
+
+    // Extract unique parentIds from the replies
+    const parentIds = [...new Set(replies.map(reply => reply.parentId))];
+
+    // Convert parentIds to ObjectId type
+    const parentObjectIds = parentIds.map(parentId => new mongoose.Types.ObjectId(parentId));
+
+    // Fetch original threads based on the converted ObjectIds
+    const originalThreads = await Thread.find({ _id: { $in: parentObjectIds } });
+
+    // console.log(originalThreads);
+
+    return originalThreads;
+  } catch (error) {
+    console.error("Error fetching user replies:", error);
+    throw error;
+  }
+}
+
+export async function getThreadsByUser(userId: mongoose.Schema.Types.ObjectId) {
+  try {
+    connectToDB();
+
+    // Find both parent thread and its replies authored by the user with the given userId
+    const threads = await Thread.find({
+      $or: [
+        { author: userId, parentId: null }, // Original threads
+        // { author: userId, parentId: { $ne: null } }, // Replies
+      ],
+    });
+
+    return threads;
+  } catch (error) {
+    console.error("Error fetching user replies:", error);
     throw error;
   }
 }
