@@ -17,9 +17,9 @@ export default function ToggleButtons() {
             <Link
               href={link.route}
               key={link.label}
-              className={`cursor-pointer bg-blue-500 text-white py-2 px-4 rounded focus:outline-none transition ${isActive && 'bg-primary-500'}`}
+              className={`cursor-pointer py-2 px-4 rounded focus:outline-none transition ${isActive && 'dark:bg-primary-500 bg-lightmode-3'}`}
             >
-              <p className="text-light-1 max-lg:hidden">{link.label}</p>
+              <p className=" dark:text-light-1 text-dark-1 max-lg:hidden">{link.label}</p>
             </Link>
           );
         })}
